@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Ensures mobile device uses true width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <!-- Reuse your style.css if you want consistent branding -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .spinner-overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #e00;
+      border-top: 6px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 
+  If you want the red header here, uncomment the lines below:
+  <header class="red-header">
+    <div class="header-left" style="margin-left: 0;"> 
+      <!-- minimal logo or nothing -->
+    </div>
+  </header>
+-->
+
+<div class="site-wrapper">
+  <div class="spinner-overlay">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<!-- After 3 seconds, redirect to /verify -->
+<script>
+  setTimeout(function() {
+    window.location.href = "{{ url_for('verify') }}";
+  }, 3000);
+</script>
+</body>
+</html>

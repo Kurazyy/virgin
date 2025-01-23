@@ -1,0 +1,289 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base font & layout */
+html, body {
+  height: 100%;
+  font-family: "PoppinsRegular", "GraphikWeb", Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =========================
+   HEADER (Desktop)
+   ========================= */
+.red-header {
+  background-color: #e10a0a;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0; /* Desktop top/btm spacing */
+}
+
+/* Desktop offset for the left logo */
+.header-left {
+  margin-left: 20rem;
+}
+.header-left img {
+  max-height: 40px;
+}
+
+/* Desktop nav: FR + user icon => hidden on mobile */
+.desktop-nav {
+  margin-left: auto;
+  margin-right: 5%;
+  display: flex;
+  align-items: center;
+}
+.lang-link {
+  color: #fff;
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+.user-icon {
+  color: #fff;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+/* Hamburger hidden on desktop */
+.hamburger {
+  display: none;
+}
+
+/* =========================
+   MAIN CONTENT (Desktop)
+   ========================= */
+.login-container {
+  display: flex;
+  flex: 1;
+  max-width: 1000px;  /* narrower so it’s not tiny on big screens */
+  margin: 5rem 37rem 2rem auto;
+  padding: 0 2rem;
+  position: relative;
+}
+
+/* The horizontal divider is hidden on desktop, visible on mobile. */
+.mobile-divider {
+  display: none; 
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 2rem 0;
+}
+
+/* Right-col => physically first in HTML, but on desktop we forcibly push it to the right => order=2 */
+.right-col {
+  width: 40%;
+  text-align: left;
+  order: 2;         /* so it appears on the right side on desktop */
+  margin-left: auto; 
+}
+
+.right-col h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem; 
+}
+.input-label {
+  display: block;
+  margin-top: 1rem; 
+  font-weight: bold;
+  font-size: 1rem;
+}
+.right-col input {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0 1rem 0; 
+  padding: 0.7rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.tiny-link {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #333;
+  text-decoration: underline;
+}
+.login-btn {
+  margin-bottom: 2rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #e00;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.prepaid-link {
+  margin-top: 0;
+  font-size: 0.95rem;
+}
+
+/* Left-col => physically second in HTML, but on desktop => forced left => order=1 + margin-right=20rem */
+.left-col {
+  width: 40%;
+  order: 1;
+  margin-right: 20rem;
+  text-align: left;
+}
+
+.left-col h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+.left-col p {
+  margin-bottom: 1rem;
+}
+.left-col ul {
+  list-style: none;
+  margin: 0 0 1rem;
+}
+.left-col ul li {
+  margin-bottom: 1rem;
+}
+.red-text {
+  color: #e00;
+}
+.register-btn {
+  background-color: #fff;
+  border: 1px solid #000;
+  color: #000;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+.page-footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 5%;
+}
+.footer-links {
+  margin-bottom: 0.5rem;
+}
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0.25rem;
+  font-size: 0.9rem;
+}
+.footer-note {
+  font-size: 0.85rem;
+}
+
+/*******************************************
+ MOBILE MENU (SLIDE-OUT) & RESPONSIVE
+*******************************************/
+.mobile-menu {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 70%;
+  max-width: 300px;
+  height: 100%;
+  background-color: #222;
+  color: #fff;
+  padding: 1rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 9999;
+}
+.mobile-menu.open {
+  transform: translateX(0);
+}
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.close-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+}
+.mobile-menu li {
+  margin: 1rem 0;
+}
+.mobile-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+/*
+   “Mobile” layout if narrower than 1025px => 
+   phone or small tablet => Show hamburger, stack columns in HTML order
+*/
+@media (max-width: 1024px) {
+
+  /* Hide desktop nav => show hamburger */
+  .desktop-nav {
+    display: none;
+  }
+  .hamburger {
+    display: block;
+    font-size: 2rem;
+    color: #fff;
+    position: absolute;
+    right: 1rem;
+    top: 1.4rem;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  /* Remove big offsets => left aligned for phone */
+  .red-header {
+    padding: 1rem;
+    justify-content: space-between;
+  }
+  .header-left {
+    margin-left: 0 !important;
+  }
+
+  .login-container {
+    flex-direction: column; /* stack in actual HTML order => right-col, hr, left-col */
+    margin: 2rem 1rem;
+    max-width: 100%;
+  }
+
+  .mobile-divider {
+    display: block; /* visible => separates “Welcome” & “Not registered yet?” */
+  }
+
+  .right-col {
+    width: 100%;
+    margin-left: 0 !important;
+    order: 1; /* in HTML, it’s physically first => top */
+  }
+
+  .left-col {
+    width: 100%;
+    margin-right: 0 !important;
+    order: 2; /* physically second => below the divider */
+  }
+}

